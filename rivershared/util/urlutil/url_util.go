@@ -11,7 +11,17 @@ func DatabaseSQLCompatibleURL(databaseURL string) string {
 	}
 
 	query := parsedURL.Query()
-	query.Del("pool_max_conns")
+	for _, key := range []string{
+		"pool_health_check_period",
+		"pool_max_conn_idle_time",
+		"pool_max_conn_lifetime",
+		"pool_max_conn_lifetime_jitter",
+		"pool_max_conns",
+		"pool_min_conns",
+		"pool_min_idle_conns",
+	} {
+		query.Del(key)
+	}
 
 	parsedURL.RawQuery = query.Encode()
 
